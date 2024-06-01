@@ -1,0 +1,24 @@
+spring:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    defer-datasource-initialization: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+
+
+app:
+  token:
+    access:
+      secret-key: ${JWT_SECRET_KEY_ACCESS}
+      expiration: ${JWT_EXPIRATION_ACCESS}
+    refresh:
+      secret-key: ${JWT_SECRET_KEY_REFRESH}
+      expiration: ${JWT_EXPIRATION_REFRESH}
+  allow-origins: http://localhost:3000
