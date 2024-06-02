@@ -1,5 +1,6 @@
-package com.example.demo.global.auth;
+package com.example.demo.global.auth.jwt;
 
+import com.example.demo.global.security.userdetails.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
@@ -9,6 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -25,22 +29,26 @@ public class JwtTokenProvider {
     private final Key refreshKey;
     private final Duration accessDuration;
     private final Duration refreshDuration;
+    private final UserDetailsServiceImpl userDetailsService;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
     private JwtTokenProvider(
             @Value("${app.token.access.secret-key}") String accessKey,
             @Value("${app.token.refresh.secret-key}") String refreshKey,
             @Value("${app.token.access.expiration}") Duration accessDuration,
-            @Value("${app.token.refresh.expiration}") Duration refreshDuration
+            @Value("${app.token.refresh.expiration}") Duration refreshDuration,
+            UserDetailsServiceImpl userDetailsService
     ){
         this.accessKey = Keys.hmacShaKeyFor(accessKey.getBytes());
         this.refreshKey = Keys.hmacShaKeyFor(refreshKey.getBytes());
         this.accessDuration = accessDuration;
         this.refreshDuration = refreshDuration;
+        this.userDetailsService = userDetailsService;
     }
 
     public static String parseJwtFromRequest(HttpServletRequest request) {
         final String headerAuth = request.getHeader(HttpHeaders.AUTHORIZATION);
+
         return parseJwt(headerAuth);
     }
 
@@ -80,6 +88,11 @@ public class JwtTokenProvider {
         return getClaimsFormToken(refreshToken, refreshKey);
     }
 
+    public Authentication getAuthentication(Claims claims) {
+        UserDetails userDetails = userDetailsService.loadUserById(Long.parseLong(claims.getId()));
+        return new UsernamePasswordAuthenticationToken(userDetails, "",
+                userDetails.getAuthorities());
+    }
 
     private static String parseJwt(final String headerAuth) {
 

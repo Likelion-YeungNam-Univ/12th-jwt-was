@@ -5,7 +5,7 @@ import com.example.demo.domain.auth.dto.SignUpReq;
 import com.example.demo.domain.auth.dto.TokenRes;
 import com.example.demo.domain.user.domain.User;
 import com.example.demo.domain.user.repository.UserRepository;
-import com.example.demo.global.auth.JwtTokenProvider;
+import com.example.demo.global.auth.jwt.JwtTokenProvider;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
