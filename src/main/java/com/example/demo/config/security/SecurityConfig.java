@@ -56,7 +56,7 @@ public class SecurityConfig {
                         SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(publicEndpoints).permitAll()
+                        .requestMatchers(getPublicEndpoints()).permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(auth -> auth
@@ -78,6 +78,7 @@ public class SecurityConfig {
         return source;
     }
 
+    /*AntPathRequestMatcher를 사용하면 추후 메소드 설정 등 더 유연한 경로를 매칭할 수 있다.*/
     private AntPathRequestMatcher[] getPublicEndpoints() {
         return Stream.of(publicEndpoints)
                 .map(AntPathRequestMatcher::antMatcher)
