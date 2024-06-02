@@ -41,7 +41,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # 3. 테스트를 위한 빌드 실행
+      # 3. gradlew 권한 설정
+      - name: Set up gradlew
+        run: |
+          chmod +x gradlew
+
+      # 4. 테스트를 위한 빌드 실행
       - name: Build with Gradle
         uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25
         with:
