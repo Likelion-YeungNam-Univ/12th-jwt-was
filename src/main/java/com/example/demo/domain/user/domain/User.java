@@ -27,5 +27,6 @@ public class User {
         this.password = password;
         this.nickName = nickName;
         this.email = email;
+        this.authority = Authority.ROLE_ADMIN;
     }
 }
