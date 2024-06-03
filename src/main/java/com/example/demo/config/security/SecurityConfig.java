@@ -62,7 +62,7 @@ public class SecurityConfig {
                 .exceptionHandling(auth -> auth
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
         );
-        httpSecurity.apply(jwtSecurityConfig);
+        jwtSecurityConfig.configure(httpSecurity);
 
         return httpSecurity.build();
     }
