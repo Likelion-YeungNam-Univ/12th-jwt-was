@@ -41,7 +41,7 @@ public class AuthService {
     private User checkUserValid(SignInReq request){
         User user = readUserOrThrow(request.username());
 
-        if(user.getPassword() != request.password()){
+        if(!user.getPassword().equals(request.password())){
             log.error("비밀번호가 일치하지 않습니다.");
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
