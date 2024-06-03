@@ -30,7 +30,8 @@ import java.util.stream.Stream;
 public class SecurityConfig {
 
     private static final String[] publicEndpoints = {
-            "/api/v1/auth/**",
+            "/api/v1/auth/signin",
+            "/api/v1/auth/signup",
 
             /* swagger v3*/
             "/swagger-ui/**",
