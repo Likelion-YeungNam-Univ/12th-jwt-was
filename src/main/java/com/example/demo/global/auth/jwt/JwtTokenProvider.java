@@ -9,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.convert.DurationUnit;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,14 +36,14 @@ public class JwtTokenProvider {
     private JwtTokenProvider(
             @Value("${app.token.access.secret-key}") String accessKey,
             @Value("${app.token.refresh.secret-key}") String refreshKey,
-            @Value("${app.token.access.expiration}") Duration accessDuration,
-            @Value("${app.token.refresh.expiration}") Duration refreshDuration,
+            @Value("${app.token.access.expiration}") String accessDuration,
+            @Value("${app.token.refresh.expiration}") String refreshDuration,
             UserDetailsServiceImpl userDetailsService
     ){
         this.accessKey = Keys.hmacShaKeyFor(accessKey.getBytes());
         this.refreshKey = Keys.hmacShaKeyFor(refreshKey.getBytes());
-        this.accessDuration = accessDuration;
-        this.refreshDuration = refreshDuration;
+        this.accessDuration = Duration.ofSeconds(Long.parseLong(accessDuration));
+        this.refreshDuration = Duration.ofSeconds(Long.parseLong(refreshDuration));
         this.userDetailsService = userDetailsService;
     }
 
