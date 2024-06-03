@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -93,9 +94,10 @@ public class SecurityConfig {
     }
 
     /*AntPathRequestMatcher를 사용하면 추후 메소드 설정 등 더 유연한 경로를 매칭할 수 있다.*/
-    private AntPathRequestMatcher[] getPublicEndpoints() {
-        return Stream.of(publicEndpoints)
-                .map(AntPathRequestMatcher::antMatcher)
-                .toArray(AntPathRequestMatcher[]::new);
+    private RequestMatcher[] getPublicEndpoints() {
+        return Stream.concat(
+                Stream.of(publicEndpoints).map(AntPathRequestMatcher::new),
+                Stream.of(new AntPathRequestMatcher("/api/v1/post", "GET")) // GET 요청에 대해서만 permitAll
+        ).toArray(RequestMatcher[]::new);
     }
 }
