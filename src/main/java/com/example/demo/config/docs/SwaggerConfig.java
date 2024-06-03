@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
                 description = "TestApp API 명세",
                 version = "v1"),
         servers = {
-        @Server(url = "127.0.0.1:8080", description = "Local Server"),
-        @Server(url = "49.50.167.39", description = "Develop Server")
+        @Server(url = "127.0.0.1:8080", description = "Local"),
+        @Server(url = "49.50.167.39", description = "Server")
 }
 )
 public class SwaggerConfig {
